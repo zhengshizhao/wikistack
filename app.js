@@ -14,10 +14,7 @@ app.use(express.static(path.join(__dirname, '/stylesheets')));
 //app.use(express.static('/'));
 
 app.use(bodyParser.json());
-
-
-
-//app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true}));
 
 // point res.render to the proper directory
 app.set('views', __dirname + '/views');
@@ -31,6 +28,7 @@ swig.setDefaults({cache: false});
 
 
 app.use('/wiki', wikiRouter);
+
 app.get('/', function(req, res, next){
 	res.render('index');
 });

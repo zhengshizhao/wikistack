@@ -31,6 +31,17 @@ pageSchema.virtual('route').get(function() {
 	return '/wiki/' + this.urlTitle;
 })
 
+// pageSchema.pre('save', function(next) {
+//   // do stuff
+//   //function generateUrlTitle (title, next) {
+// // 	if (title) {
+// // 		return title.replace(/\s+/g, "_").replace(/\W/g, '');
+// // 	} else {
+// // 		return Math.random().toString(36).substring(2,7);
+// // 	}
+// // }
+//   next();
+// });
 
 
 
