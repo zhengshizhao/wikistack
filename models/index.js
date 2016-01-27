@@ -23,26 +23,31 @@ var userSchema = new Schema({
 	email: {type: String, required: true, unique: true}
 });
 
+
+
 var Page = mongoose.model('Page', pageSchema);
 var User = mongoose.model('User', userSchema);
-
 
 pageSchema.virtual('route').get(function() {
 	return '/wiki/' + this.urlTitle;
 })
 
-// pageSchema.pre('save', function(next) {
-//   // do stuff
-//   //function generateUrlTitle (title, next) {
-// // 	if (title) {
-// // 		return title.replace(/\s+/g, "_").replace(/\W/g, '');
-// // 	} else {
-// // 		return Math.random().toString(36).substring(2,7);
-// // 	}
-// // }
-//   next();
-// });
+pageSchema.pre('validate', function(next) {
+  //do stuff
+  //var title = doc.title;
+  console.log("this is this:", this);
+ 
+  this.urlTitle =  generateUrlTitle (this.title);
+  next();
+});
 
+function generateUrlTitle (title) {
+	if (title) {
+		return title.replace(/\s+/g, "_").replace(/\W/g, '');
+	} else {
+		return Math.random().toString(36).substring(2,7);
+	}
+}
 
 
 module.exports = {
