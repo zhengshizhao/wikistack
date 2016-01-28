@@ -14,7 +14,9 @@ var pageSchema = new Schema({
   urlTitle: {type: String, required: true},
   content:   {type: String, required: true},
   status: {type: String, enum: statuses},
+  //if we use Date.now(), it will record the time when this program runs
   date: { type: Date, default: Date.now },
+  //refrence 
   author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
 });
 
@@ -25,17 +27,18 @@ var userSchema = new Schema({
 
 
 
-var Page = mongoose.model('Page', pageSchema);
-var User = mongoose.model('User', userSchema);
 
-pageSchema.virtual('route').get(function() {
+
+pageSchema.virtual('route').get(
+    //getter function
+	function() {
 	return '/wiki/' + this.urlTitle;
 })
 
 pageSchema.pre('validate', function(next) {
   //do stuff
   //var title = doc.title;
-  console.log("this is this:", this);
+  //console.log("this is this:", this);
  
   this.urlTitle =  generateUrlTitle (this.title);
   next();
@@ -49,6 +52,8 @@ function generateUrlTitle (title) {
 	}
 }
 
+var Page = mongoose.model('Page', pageSchema);
+var User = mongoose.model('User', userSchema);
 
 module.exports = {
   Page: Page,

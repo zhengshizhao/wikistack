@@ -5,6 +5,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var swig = require('swig');
 var wikiRouter = require('./routes/wiki');
+var pageLink = require('./filters')(swig)
 //var router = require('./routes');
 
 

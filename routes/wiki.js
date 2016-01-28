@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var mongoose = require('mongoose');
 
 var models = require('../models/');
 var Page = models.Page; 
@@ -8,37 +9,53 @@ var User = models.User;
 module.exports =  router;
 
 router.get('/', function(req, res, next) {
-	res.redirect('/');
+	//res.redirect('/');
+    Page.find()
+    .then(function(pagesfound){
+       	res.render('index',
+       	{pages: pagesfound});
+       })
+	.then(null,function(err){
+		es.render('error',{error: err});
+		});
 });
 
-// function generateUrlTitle (title) {
-// 	if (title) {
-// 		return title.replace(/\s+/g, "_").replace(/\W/g, '');
-// 	} else {
-// 		return Math.random().toString(36).substring(2,7)
-// 	}
-// }
+
+
 
 router.post('/', function(req, res, next) {
   var page = new Page({
   	title: req.body.title,
   	content: req.body.content
   });
- // console.log(req.body);
   
   page.save()
-  .then(function(){
-  	res.redirect('/');
-  },function(err){
-  	console.log(err);
-  	res.render('error',{error: err});
-  });
+  .then(function(savedPage){
+  		res.redirect(savedPage.route); 
+  	})
+  .then(null,function(err){
+		res.render('error',{error: err});
+	})
 
-  
-   //res.json(req.body);
-  //res.send('got to POST /wiki/');
 });
 
 router.get('/add', function(req, res, next) {
   res.render('addpage');
+
+  
 });
+
+router.get('/:urlTitle', function(req, res,next) {
+	Page.findOne({'urlTitle':req.params.urlTitle})
+	.exec()
+	.then(function(pagefound){
+		//res.json(pagefound);
+        res.render('wikipage',
+       	{page: pagefound})
+    })
+	.then(null,function(err){
+		res.render('error',{error: err});
+	});
+	
+});
+
