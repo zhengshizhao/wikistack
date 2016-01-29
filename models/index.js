@@ -17,7 +17,8 @@ var pageSchema = new Schema({
   //if we use Date.now(), it will record the time when this program runs
   date: { type: Date, default: Date.now },
   //refrence 
-  author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+  author: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  tags: {type:[String]}
 });
 
 var userSchema = new Schema({

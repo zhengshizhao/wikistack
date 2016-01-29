@@ -10,10 +10,10 @@ module.exports =  router;
 
 router.get('/', function(req, res, next) {
 	//res.redirect('/');
-    Page.find()
+    Page.find({}).exec()
     .then(function(pagesfound){
        	res.render('index',
-       	{pages: pagesfound});
+       	  {pages: pagesfound});
        })
 	.then(null,function(err){
 		es.render('error',{error: err});
@@ -24,12 +24,14 @@ router.get('/', function(req, res, next) {
 
 
 router.post('/', function(req, res, next) {
-  var page = new Page({
+  var newPage = new Page({
   	title: req.body.title,
-  	content: req.body.content
+  	content: req.body.content,
+    status: req.body.status,
+    tags: req.body.tags.split(",")
   });
   
-  page.save()
+  newPage.save()
   .then(function(savedPage){
   		res.redirect(savedPage.route); 
   	})
@@ -49,6 +51,7 @@ router.get('/:urlTitle', function(req, res,next) {
 	Page.findOne({'urlTitle':req.params.urlTitle})
 	.exec()
 	.then(function(pagefound){
+       console.log(pagefound);
 		//res.json(pagefound);
         res.render('wikipage',
        	{page: pagefound})
